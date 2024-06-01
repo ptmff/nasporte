@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>0f2320e2-7f50-4c79-b1b7-4b679d0c2fea</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Npgsql" Version="8.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+        <PackageReference Include="PInvoke.BCrypt" Version="0.7.124" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.6.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.6.2" />
+    </ItemGroup>
+
+</Project>
