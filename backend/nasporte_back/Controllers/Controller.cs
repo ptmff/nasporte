@@ -147,6 +147,12 @@ public class AuthController : ControllerBase
                     }
                 }
                 
+                // Проверяем что оба введённых пароля идентичны
+                if (userModel.Password != userModel.RepeatedPassword)
+                {
+                    return BadRequest("Введённые пароли не совпадают.");
+                }
+                
                 // Генерируем уникальный id для нового пользователя
                 var userId = Guid.NewGuid();
 
