@@ -176,7 +176,7 @@ public class AuthController : ControllerBase
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                        new Claim(ClaimTypes.Name, userModel.Username)
+                        new Claim("Id", userId.ToString())
                         // Здесь можно добавить другие утверждения (claims), если требуется
                     }),
                     Expires = DateTime.UtcNow.AddHours(1), // Время жизни токена - 1 час
@@ -227,7 +227,7 @@ public class AuthController : ControllerBase
                                 {
                                     Subject = new ClaimsIdentity(new Claim[]
                                     {
-                                        new Claim(ClaimTypes.Name, reader["username"].ToString())
+                                        new Claim("Id", reader["id"].ToString())
                                         // Здесь можно добавить другие утверждения (claims), если требуется
                                     }),
                                     Expires = DateTime.UtcNow.AddHours(1), // Время жизни токена - 1 час
@@ -269,7 +269,10 @@ public class LoggedController : ControllerBase
     [Authorize]
     public IActionResult Get()
     {
-        return Ok("This is a secure endpoint");
+        var claimsIdentity = (ClaimsIdentity)User.Identity;
+        var claims = claimsIdentity.Claims;
+        var userId = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+        return Ok($"This is a secure endpoint\nUser ID: {userId}");
     }
 }
 

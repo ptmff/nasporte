@@ -26,7 +26,7 @@ builder.Services.AddAuthentication(options =>
         {
              ValidateIssuer = false,
              ValidateAudience = false,
-             ValidateLifetime = false,
+             ValidateLifetime = true,
              ValidateIssuerSigningKey = true,
             // ValidIssuer = "yourdomain.com",
             // ValidAudience = "yourdomain.com",
@@ -40,7 +40,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Nasporte API", Version = "v0.1 (alpha)" });
 
     // Настраиваем JWT аутентификацию для Swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -50,7 +50,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Введите токен JWT в формате '{your token}'"
+        Description = "Введите токен JWT в формате {your token}"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
