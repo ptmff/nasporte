@@ -1,0 +1,300 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  bool _obscureText = true;
+
+
+  void _register() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Пожалуйста заполните все поля')),
+      );
+      return;
+    }
+    if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$').hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Некорректная почта')),
+      );
+    }
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Пароли не совпадают')),
+      );
+      return;
+    }
+    final url = 'https://urlapi.com/register';//url api для регистрации
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+      }),
+    );
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Регистрация прошла успешно')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Регистрация не удалась')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xff171717),
+      appBar: appBar(context),
+      body: ListView(
+        children: [
+          const SizedBox(height: 14),
+          _registerText(),
+          const SizedBox(height: 40),
+          _emailRegisterInput(),
+          const SizedBox(height: 25),
+          _passwordRegisterInput(),
+          const SizedBox(height: 25),
+          _passwordRepeatInput(),
+          const SizedBox(height: 25),
+          _registerButton(context),
+        ],
+      ),
+    );
+  }
+
+  Padding _registerButton(context) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 50, right: 50),
+    child: ElevatedButton(
+      onPressed: _register,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xff6236FF),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        fixedSize: const Size.fromHeight(44),
+      ),
+      child: const Text(
+        'Регистрация',
+        style: TextStyle( 
+          color: Color(0xffFFFFFF),
+          fontSize: 14, 
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  );
+}
+
+  Column _passwordRepeatInput() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(left: 50),
+        child: Text(
+          'Повторите пароль',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xffFFFFFF),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 50, top: 10, right: 50),
+        child: TextField(
+          obscureText: _obscureText,
+          controller: _confirmPasswordController,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.black,
+            hintText: 'Повторите пароль...',
+            hintStyle: const TextStyle(
+              color:Color(0xffC9C9C9),
+              fontSize: 12,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(_obscureText
+                  ? Icons.visibility_off
+                  : Icons.visibility),
+              onPressed: () {
+                setState(() {
+                   _obscureText = !_obscureText;
+                });
+              },
+            ),
+          ),
+          style: const TextStyle(
+            color:Color(0xffC9C9C9),
+            fontSize: 12,
+          ),
+        ),
+      ),
+    ]
+  );
+}
+
+  Column _passwordRegisterInput() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(left: 50),
+        child: Text(
+          'Пароль',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xffFFFFFF),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 50, top: 10, right: 50),
+        child: TextField(
+          obscureText: _obscureText,
+          controller: _passwordController,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.black,
+            hintText: 'Придумайте пароль...',
+            hintStyle: const TextStyle(
+              color:Color(0xffC9C9C9),
+              fontSize: 12,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(_obscureText
+                  ? Icons.visibility_off
+                  : Icons.visibility),
+              onPressed: () {
+                setState(() {
+                   _obscureText = !_obscureText;
+                });
+              },
+            ),
+          ),
+          style: const TextStyle(
+            color:Color(0xffC9C9C9),
+            fontSize: 12,
+          ),
+        ),
+      ),
+    ]
+  );
+}
+
+  Column _emailRegisterInput() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(left: 50),
+        child: Text(
+          'Почта',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xffFFFFFF),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 50, top: 10, right: 50),
+        child: TextFormField(
+          controller: _emailController,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.black,
+            hintText: 'Введите почту...',
+            hintStyle: const TextStyle(
+              color: Color(0xffC9C9C9),
+              fontSize: 12,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          style: const TextStyle(
+            color: Color(0xffC9C9C9),
+            fontSize: 12,
+          ),
+        ),
+      ),
+    ]
+  );
+}
+
+  Column _registerText() {
+  return const Column(
+    children: [
+      Text(
+        'Регистрация',
+        style: TextStyle(
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          color: Color(0xffFFFFFF),
+        ),
+      ),
+      Text(
+        'Создать аккаунт',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Color(0xffC9C9C9),
+        ),
+      ),
+    ],
+  );
+}
+
+  AppBar appBar(context) {
+    return AppBar(
+      backgroundColor: const Color(0xff171717),
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          alignment: Alignment.center,
+          child: SvgPicture.asset(
+            'assets/icons/retturn_arrow.svg',
+            width: 17.55,
+            height: 20,
+            ),
+        ),
+      ),
+    );
+  }
+}
