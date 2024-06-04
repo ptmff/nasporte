@@ -115,3 +115,4 @@ C:\Users\ptmff\RiderProjects\nasporte\backend\nasporte_back\bin\Debug\net8.0\ru\
 C:\Users\ptmff\RiderProjects\nasporte\backend\nasporte_back\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\ptmff\RiderProjects\nasporte\backend\nasporte_back\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\ptmff\RiderProjects\nasporte\backend\nasporte_back\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\ptmff\RiderProjects\nasporte\backend\nasporte_back\bin\Debug\net8.0\nasporte_back.staticwebassets.runtime.json
