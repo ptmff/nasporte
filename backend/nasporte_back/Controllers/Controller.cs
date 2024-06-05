@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Npgsql;
+using Microsoft.Extensions.Logging;
 
 namespace Controllers;
 
@@ -15,10 +16,12 @@ namespace Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration _configuration;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IConfiguration configuration)
+    public AuthController(IConfiguration configuration, ILogger<AuthController> logger)
     {
         _configuration = configuration;
+        _logger = logger;
     }
 
     [HttpPost("register")]
@@ -28,7 +31,6 @@ public class AuthController : ControllerBase
         {
             using (var connection = PostgresConnection.GetConnection(_configuration))
             {
-                // Проверяем, не существует ли уже пользователь с таким же именем
                 var checkUserByNameQuery = "SELECT COUNT(*) FROM Users WHERE username = @Username";
                 using (var command = new NpgsqlCommand(checkUserByNameQuery, connection))
                 {
@@ -36,11 +38,11 @@ public class AuthController : ControllerBase
                     var existingUsersByNameCount = (long)(await command.ExecuteScalarAsync() ?? throw new InvalidOperationException());
                     if (existingUsersByNameCount > 0)
                     {
+                        _logger.LogWarning("User already exists: username={Username}", userModel.Username);
                         return BadRequest("Пользователь с таким именем уже существует.");
                     }
                 }
 
-                // Проверяем, не существует ли уже пользователь с такой же электронной почтой
                 var checkUserByEmailQuery = "SELECT COUNT(*) FROM Users WHERE email = @email";
                 using (var command = new NpgsqlCommand(checkUserByEmailQuery, connection))
                 {
@@ -48,23 +50,20 @@ public class AuthController : ControllerBase
                     var existingUsersByEmailCount = (long)await command.ExecuteScalarAsync();
                     if (existingUsersByEmailCount > 0)
                     {
+                        _logger.LogWarning("User already exists: email={Email}", userModel.Email);
                         return BadRequest("Пользователь с такой электронной почтой уже существует.");
                     }
                 }
-                
-                // Проверяем что оба введённых пароля идентичны
+
                 if (userModel.Password != userModel.RepeatedPassword)
                 {
+                    _logger.LogWarning("Passwords do not match for user: username={Username}", userModel.Username);
                     return BadRequest("Введённые пароли не совпадают.");
                 }
-                
-                // Генерируем уникальный id для нового пользователя
-                var userId = Guid.NewGuid();
 
-                // Хэшируем пароль, прежде чем сохранять его в базе данных
+                var userId = Guid.NewGuid();
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
 
-                // Добавляем нового пользователя в базу данных
                 var insertUserQuery = "INSERT INTO Users (username, email, id, password) VALUES (@Username, @email, @id, @password)";
                 using (var command = new NpgsqlCommand(insertUserQuery, connection))
                 {
@@ -75,36 +74,33 @@ public class AuthController : ControllerBase
                     await command.ExecuteNonQueryAsync();
                 }
 
-                // Создаем JWT токен
                 var tokenHandler = new JwtSecurityTokenHandler();
-
                 var key = Encoding.ASCII.GetBytes(_configuration["Salt"]);
-                
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("Id", userId.ToString())
-                        // Здесь можно добавить другие утверждения (claims), если требуется
                     }),
-                    Expires = DateTime.UtcNow.AddHours(1), // Время жизни токена - 1 час
+                    Expires = DateTime.UtcNow.AddHours(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var tokenString = tokenHandler.WriteToken(token);
 
-                // Возвращаем успешный ответ с JWT токеном
+                _logger.LogInformation("User registered successfully: username={Username}, id={UserId}", userModel.Username, userId);
+
                 return Ok(new { Token = tokenString });
             }
         }
         catch (Exception ex)
         {
-            // Обрабатываем любые ошибки и возвращаем ошибку сервера
+            _logger.LogError(ex, "Error occurred during user registration: username={Username}", userModel.Username);
             return StatusCode(500, $"Произошла ошибка при регистрации: {ex.Message}");
         }
     }
-    
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
@@ -112,7 +108,6 @@ public class AuthController : ControllerBase
         {
             using (var connection = PostgresConnection.GetConnection(_configuration))
             {
-                // Проверяем, существует ли пользователь с таким именем или электронной почтой
                 var checkUserQuery = "SELECT * FROM Users WHERE username = @username OR email = @email";
                 using (var command = new NpgsqlCommand(checkUserQuery, connection))
                 {
@@ -122,39 +117,37 @@ public class AuthController : ControllerBase
                     {
                         if (await reader.ReadAsync())
                         {
-                            // Проверяем пароль
                             string hashedPassword = reader["password"].ToString();
                             if (BCrypt.Net.BCrypt.Verify(model.Password, hashedPassword))
                             {
-                                // Создаем JWT токен
                                 var tokenHandler = new JwtSecurityTokenHandler();
-
                                 var key = Encoding.ASCII.GetBytes(_configuration["Salt"]);
-
                                 var tokenDescriptor = new SecurityTokenDescriptor
                                 {
                                     Subject = new ClaimsIdentity(new Claim[]
                                     {
                                         new Claim("Id", reader["id"].ToString())
-                                        // Здесь можно добавить другие утверждения (claims), если требуется
                                     }),
-                                    Expires = DateTime.UtcNow.AddHours(1), // Время жизни токена - 1 час
+                                    Expires = DateTime.UtcNow.AddHours(1),
                                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                                         SecurityAlgorithms.HmacSha256Signature)
                                 };
                                 var token = tokenHandler.CreateToken(tokenDescriptor);
                                 var tokenString = tokenHandler.WriteToken(token);
 
-                                // Возвращаем успешный ответ с JWT токеном
+                                _logger.LogInformation("User logged in successfully: login={Login}", model.Login);
+
                                 return Ok(new { Token = tokenString });
                             }
                             else
                             {
+                                _logger.LogWarning("Invalid password for user: login={Login}", model.Login);
                                 return Unauthorized("Неверный пароль");
                             }
                         }
                         else
                         {
+                            _logger.LogWarning("User not found: login={Login}", model.Login);
                             return Unauthorized("Пользователь не найден");
                         }
                     }
@@ -163,7 +156,7 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Обрабатываем любые ошибки и возвращаем ошибку сервера
+            _logger.LogError(ex, "Error occurred during user login: login={Login}", model.Login);
             return StatusCode(500, $"Произошла ошибка при авторизации: {ex.Message}");
         }
     }
@@ -173,6 +166,13 @@ public class AuthController : ControllerBase
 [ApiController]
 public class LoggedController : ControllerBase
 {
+    private readonly ILogger<LoggedController> _logger;
+
+    public LoggedController(ILogger<LoggedController> logger)
+    {
+        _logger = logger;
+    }
+
     [HttpGet]
     [Authorize]
     public IActionResult Get()
@@ -180,9 +180,9 @@ public class LoggedController : ControllerBase
         var claimsIdentity = (ClaimsIdentity)User.Identity;
         var claims = claimsIdentity.Claims;
         var userId = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+
+        _logger.LogInformation("Secure endpoint accessed by user: id={UserId}", userId);
+
         return Ok($"This is a secure endpoint\nUser ID: {userId}");
     }
 }
-
-
-
