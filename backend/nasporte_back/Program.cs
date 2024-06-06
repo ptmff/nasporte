@@ -1,4 +1,6 @@
+using System.Net;
 using System.Text;
+using System.Text.Json;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -70,6 +72,15 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 builder.Services.AddSignalR(); 
+builder.Services.AddLogging(config =>
+{
+    config.ClearProviders();
+    config.AddConsole(options =>
+    {
+        options.TimestampFormat = "[yyyy-MM-dd HH:mm:ss] ";
+    });
+});
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 var configuration = builder.Configuration;
 
@@ -84,6 +95,35 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (Exception ex)
+    {
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An unhandled exception occurred.");
+
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+        var result = JsonSerializer.Serialize(new { error = "An unexpected error occurred." });
+        await context.Response.WriteAsync(result);
+    }
+});
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
