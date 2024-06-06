@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:nasporte_frontend/pages/register.dart';
 
@@ -9,11 +11,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class  _LoginPageState extends State<LoginPage>{
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscureText = true;
 
-  void _login() {
+  void _login() async{
     final email = _emailController.text;
     final password = _passwordController.text;
     if (email.isEmpty || password.isEmpty) {
@@ -27,6 +30,26 @@ class  _LoginPageState extends State<LoginPage>{
         const SnackBar(content: Text('Некорректная почта')),
       );
       return;
+    }
+    const url = 'http://10.0.2.2:5038/Auth/login';
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'login': email,
+        'password': password,
+      }),
+    );
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Вы вошли в аккаунт')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Неверная почта или пароль')),
+      );
     }
     // Navigator.push(
     //   context,

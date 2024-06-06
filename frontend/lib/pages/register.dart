@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nasporte_frontend/pages/login.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -12,6 +13,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
 
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -19,10 +21,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
 
   void _register() async {
+    final username = _usernameController.text;
     final email = _emailController.text;
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
-    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty || username.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Пожалуйста заполните все поля')),
       );
@@ -39,21 +42,27 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       return;
     }
-    final url = 'https://urlapi.com/register';//url api для регистрации
+    const url = 'http://10.0.2.2:5038/Auth/register';
     final response = await http.post(
       Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
+        'username': username,
         'email': email,
         'password': password,
+        'repeatedPassword': confirmPassword,
       }),
     );
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Регистрация прошла успешно')),
       );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage())
+        );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Регистрация не удалась')),
@@ -71,6 +80,8 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 14),
           _registerText(),
           const SizedBox(height: 40),
+          _usernameRegisterInput(),
+          const SizedBox(height: 25),
           _emailRegisterInput(),
           const SizedBox(height: 25),
           _passwordRegisterInput(),
@@ -78,6 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
           _passwordRepeatInput(),
           const SizedBox(height: 25),
           _registerButton(context),
+          
         ],
       ),
     );
@@ -104,6 +116,48 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     ),
+  );
+}
+
+Column _usernameRegisterInput() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(left: 50),
+        child: Text(
+          'Имя пользователя',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xffFFFFFF),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 50, top: 10, right: 50),
+        child: TextField(
+          controller: _usernameController,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.black,
+            hintText: 'Введите имя пользователя...',
+            hintStyle: const TextStyle(
+              color:Color(0xffC9C9C9),
+              fontSize: 12,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          style: const TextStyle(
+            color:Color(0xffC9C9C9),
+            fontSize: 12,
+          ),
+        ),
+      ),
+    ]
   );
 }
 

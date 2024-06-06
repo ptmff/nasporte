@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nasporte_frontend/pages/load.dart';
+import 'package:nasporte_frontend/pages/main_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
-      home: const LoadPage(),
+      home: const MainPage(),
     );
   }
 }
