@@ -34,86 +34,107 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        backgroundColor: const Color(0xffFFFFFF),
-        //elevation: 0, тень хз потом сделаю
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 0 ? Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(12),
-                color: const Color(0xffCAC5F3),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: SvgPicture.asset('assets/icons/home_selected.svg'),
-                ),
-            ) : SvgPicture.asset('assets/icons/home.svg'),
-            label: '',
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: Color(0xffFFFFFF),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(14),
+            topRight: Radius.circular(14),
           ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 1 ? Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(12),
-                color: const Color(0xffCAC5F3),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: SvgPicture.asset('assets/icons/schedule_selected.svg'),
-                ),
-            ) : SvgPicture.asset('assets/icons/schedule.svg'),
-            label: '',
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(14),
+            topRight: Radius.circular(14),
           ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 2 ? Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(12),
-                color: const Color(0xffCAC5F3),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor: const Color(0xffFFFFFF),
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: _selectedIndex == 0 ? Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(12),
+                    color: const Color(0xffCAC5F3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: SvgPicture.asset('assets/icons/home_selected.svg'),
+                    ),
+                ) : SvgPicture.asset('assets/icons/home.svg'),
+                label: '',
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: SvgPicture.asset('assets/icons/trains_selected.svg'),
-                ),
-            ) : SvgPicture.asset('assets/icons/trains.svg'),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 3 ? Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(12),
-                color: const Color(0xffCAC5F3),
+              BottomNavigationBarItem(
+                icon: _selectedIndex == 1 ? Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(12),
+                    color: const Color(0xffCAC5F3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: SvgPicture.asset('assets/icons/schedule_selected.svg'),
+                    ),
+                ) : SvgPicture.asset('assets/icons/schedule.svg'),
+                label: '',
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: SvgPicture.asset('assets/icons/home_selected.svg'), //поменять home_selected на progression_selected
-                ),
-            ) : SvgPicture.asset('assets/icons/progression.svg'),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: _selectedIndex == 4 ? Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(12),
-                color: const Color(0xffCAC5F3),
+              BottomNavigationBarItem(
+                icon: _selectedIndex == 2 ? Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(12),
+                    color: const Color(0xffCAC5F3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: SvgPicture.asset('assets/icons/trains_selected.svg'),
+                    ),
+                ) : SvgPicture.asset('assets/icons/trains.svg'),
+                label: '',
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: SvgPicture.asset('assets/icons/home_selected.svg'), //поменять home_selected на profile_selected
-                ),
-            ) : SvgPicture.asset('assets/icons/profile.svg'),
-            label: '',
+              BottomNavigationBarItem(
+                icon: _selectedIndex == 3 ? Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(12),
+                    color: const Color(0xffCAC5F3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 11),
+                    child: SvgPicture.asset('assets/icons/progression_selected.svg'),
+                    ),
+                ) : SvgPicture.asset('assets/icons/progression.svg'),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: _selectedIndex == 4 ? Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(12),
+                    color: const Color(0xffCAC5F3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7.5),
+                    child: SvgPicture.asset('assets/icons/profile_selected.svg'),
+                    ),
+                ) : SvgPicture.asset('assets/icons/profile.svg'),
+                label: '',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
           ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        ),
       ),
     );
   }
