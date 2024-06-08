@@ -3276,24 +3276,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ptmff\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\ddm22\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ptmff\\RiderProjects\\nasporte\\backend\\nasporte_back\\nasporte_back.csproj",
+      "projectUniqueName": "C:\\Users\\ddm22\\nasporte\\backend\\nasporte_back\\nasporte_back.csproj",
       "projectName": "nasporte_back",
-      "projectPath": "C:\\Users\\ptmff\\RiderProjects\\nasporte\\backend\\nasporte_back\\nasporte_back.csproj",
-      "packagesPath": "C:\\Users\\ptmff\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ptmff\\RiderProjects\\nasporte\\backend\\nasporte_back\\obj\\",
+      "projectPath": "C:\\Users\\ddm22\\nasporte\\backend\\nasporte_back\\nasporte_back.csproj",
+      "packagesPath": "C:\\Users\\ddm22\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ddm22\\nasporte\\backend\\nasporte_back\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\ptmff\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\ddm22\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3313,6 +3312,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3389,7 +3393,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\ptmff\\.dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

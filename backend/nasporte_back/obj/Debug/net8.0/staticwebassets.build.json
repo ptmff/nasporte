@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "nKhOXd7BrZA4hoM4ymVVObhtMnj+v31xuhuyp61tC1Y=",
+  "Hash": "mRzMbcKktK3htJp7BA+zeYSytE9XA/2+dWWog7IdDxo=",
   "Source": "nasporte_back",
   "BasePath": "_content/nasporte_back",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "nasporte_back\\wwwroot",
       "Source": "nasporte_back",
-      "ContentRoot": "C:\\Users\\ptmff\\RiderProjects\\nasporte\\backend\\nasporte_back\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\ddm22\\nasporte\\backend\\nasporte_back\\wwwroot\\",
       "BasePath": "_content/nasporte_back",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\ptmff\\RiderProjects\\nasporte\\backend\\nasporte_back\\wwwroot\\index.html",
+      "Identity": "c:\\Users\\ddm22\\nasporte\\backend\\nasporte_back\\wwwroot\\index.html",
       "SourceId": "nasporte_back",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\ptmff\\RiderProjects\\nasporte\\backend\\nasporte_back\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\ddm22\\nasporte\\backend\\nasporte_back\\wwwroot\\",
       "BasePath": "_content/nasporte_back",
       "RelativePath": "index.html",
       "AssetKind": "All",
