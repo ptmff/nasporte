@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h2>Welcome to the Chat App</h2>
+
+<form asp-controller="Home" asp-action="CreateChat" method="post"
+      action="@Url.Action("CreateChat", "Home")">
+    <button type="submit">Create New Chat</button>
+</form>
