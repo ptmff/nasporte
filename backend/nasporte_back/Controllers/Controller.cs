@@ -205,3 +205,22 @@ public class LoggedController : ControllerBase
 // );
 
 
+
+// примерно как будет таблица выглядеть
+
+// CREATE TABLE dialogs (
+//     id SERIAL PRIMARY KEY,
+//     user1_id INTEGER NOT NULL,
+//     user2_id INTEGER NOT NULL,
+//     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+// );
+
+// CREATE TABLE messages (
+//     id SERIAL PRIMARY KEY,
+//     dialog_id INTEGER NOT NULL REFERENCES dialogs(id),
+//     sender_id INTEGER NOT NULL,
+//     text TEXT NOT NULL,
+//     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+// );
+
+

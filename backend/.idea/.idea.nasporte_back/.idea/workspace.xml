@@ -9,20 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc630c72-d58f-40a7-846c-896641773bee" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.nasporte_back/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.nasporte_back/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/bin/Debug/net8.0/nasporte_back.dll" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/bin/Debug/net8.0/nasporte_back.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/bin/Debug/net8.0/nasporte_back.exe" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/bin/Debug/net8.0/nasporte_back.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/bin/Debug/net8.0/nasporte_back.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/bin/Debug/net8.0/nasporte_back.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/apphost.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.dll" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/nasporte_back.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/ref/nasporte_back.dll" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/ref/nasporte_back.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/refint/nasporte_back.dll" beforeDir="false" afterPath="$PROJECT_DIR$/nasporte_back/obj/Debug/net8.0/refint/nasporte_back.dll" afterDir="false" />
-    </list>
+    <list default="true" id="bc630c72-d58f-40a7-846c-896641773bee" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,7 +38,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5147b10c5a8c4522b56fba0a889139cfc8f908/7f/ecde5117/Guid.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/649f9a5315084d038b64e29ea11b1fb5b8a0/3b/adf13e38/IConfiguration.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/649f9a5315084d038b64e29ea11b1fb5b8a0/86/93aace5d/IConfigurationSection.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ptmff/RiderProjects/nasporte/backend/nasporte_back/Controllers/Controller.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/nasporte_back/Controllers/Controller.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/nasporte_back/Models/Models.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -74,7 +61,7 @@
   "keyToString": {
     ".NET Launch Settings Profile.nasporte_back: IIS Express.executor": "Run",
     ".NET Launch Settings Profile.nasporte_back: http.executor": "Run",
-    ".NET Launch Settings Profile.nasporte_back: https.executor": "Debug",
+    ".NET Launch Settings Profile.nasporte_back: https.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "ToolWindowMonitoring.ShowToolbar": "false",
     "git-widget-placeholder": "dev",
@@ -98,7 +85,7 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.nasporte_back: https">
+  <component name="RunManager" selected=".NET Launch Settings Profile.nasporte_back: http">
     <configuration name="nasporte_back: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/nasporte_back/nasporte_back.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
@@ -162,7 +149,7 @@
       <workItem from="1717429803684" duration="2995000" />
       <workItem from="1717495593388" duration="5034000" />
       <workItem from="1717543835857" duration="283000" />
-      <workItem from="1717547333009" duration="4831000" />
+      <workItem from="1717547333009" duration="6408000" />
     </task>
     <task id="LOCAL-00001" summary="добавил запросы на регистрацию и авторизацию с использованием JWT Bearer">
       <option name="closed" value="true" />
@@ -196,7 +183,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717432997340</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="добавил логирование ошибок в запросах">
+      <option name="closed" value="true" />
+      <created>1717554293174</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717554293174</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,6 +216,7 @@
     <MESSAGE value="поправил регистрацию. теперь принимаем два пароля и проверяем их идентичность." />
     <MESSAGE value="." />
     <MESSAGE value="добавил id юзера в jwt payload" />
-    <option name="LAST_COMMIT_MESSAGE" value="добавил id юзера в jwt payload" />
+    <MESSAGE value="добавил логирование ошибок в запросах" />
+    <option name="LAST_COMMIT_MESSAGE" value="добавил логирование ошибок в запросах" />
   </component>
 </project>
