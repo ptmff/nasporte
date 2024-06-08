@@ -1,0 +1,36 @@
+@page
+@model ChatApp.Pages.ChatModel
+
+<div class="container">
+    <h1>Chat</h1>
+    <form>
+        <input type="text" id="message" />
+        <button type="submit">Send</button>
+    </form>
+    <ul id="messages">
+        @foreach (var message in Model.Messages)
+        {
+            <li>@message.Text (@message.CreatedAt)</li>
+        }
+    </ul>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (e) {
+                e.preventDefault();
+                var message = $("#message").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/api/messages",
+                    data: { text: message },
+                    success: function (data) {
+                        $("#messages").append("<li>" + data.text + " (" + data.createdAt + ")</li>");
+                        $("#message").val("");
+                    }
+                });
+            });
+        });
+    </script>
+}
