@@ -343,4 +343,57 @@ public class ChatController : ControllerBase
             return StatusCode(500, $"Произошла ошибка при выводе всех чатов: {ex.Message}");
         }
     }
+    
+    [HttpGet("Messages")]
+    [Authorize]
+    public async Task<IActionResult> Messages([FromQuery] string chatId)
+    {
+        try
+        {
+            using (var connection = PostgresConnection.GetConnection(_configuration))
+            {
+                if (connection.State != System.Data.ConnectionState.Open)
+                {
+                    await connection.OpenAsync();
+                }
+
+                var findUserQuery = "SELECT * FROM Messages WHERE chat_id = @chatId";
+                using (var findCommand = new NpgsqlCommand(findUserQuery, connection))
+                {
+                    findCommand.Parameters.AddWithValue("@chatId", chatId);
+
+                    using (var reader = await findCommand.ExecuteReaderAsync())
+                    {
+                        var messages = new List<Message>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            var message = new Message
+                            {
+                                Id = reader.GetGuid(reader.GetOrdinal("id")),
+                                ChatId = reader.GetString(reader.GetOrdinal("chat_id")),
+                                Username = reader.GetString(reader.GetOrdinal("username")),
+                                MessageText = reader.GetString(reader.GetOrdinal("message_text")),
+                                TimeStamp = reader.GetDateTime(reader.GetOrdinal("time_stamp"))
+                            };
+                            messages.Add(message);
+                        }
+
+                        if (messages.Count == 0)
+                        {
+                            return NotFound("Chat not found");
+                        }
+
+                        return Ok(messages);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during messages listing: chatId={chatId}");
+            return StatusCode(500, $"Произошла ошибка при выводе всех сообщений: {ex.Message}");
+        }
+    }
+
 }
