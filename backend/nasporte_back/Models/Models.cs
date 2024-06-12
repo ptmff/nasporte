@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
@@ -33,5 +34,26 @@ namespace Models
     public string Email { get; set; }
     public string Password { get; set; }
     public string RepeatedPassword { get; set; }
+  }
+  
+  [Table("messages")]
+  public class Message
+  {
+    [Key]
+    [Column("id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
+    
+    [Column("chat_id")]
+    public string ChatId { get; set; }
+
+    [Column("username")]
+    public string Username { get; set; }
+
+    [Column("message_text")]
+    public string MessageText { get; set; }
+    
+    [Column("time_stamp")]
+    public DateTime TimeStamp { get; set; }
   }
 }
