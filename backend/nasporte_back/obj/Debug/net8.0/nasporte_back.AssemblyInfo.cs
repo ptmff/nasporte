@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("nasporte_back")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c291dbc282520d33c5d5ddce008ba76259fe637f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+234e67af29abed1dd5568b2a2e3a0126611fdc13")]
 [assembly: System.Reflection.AssemblyProductAttribute("nasporte_back")]
 [assembly: System.Reflection.AssemblyTitleAttribute("nasporte_back")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

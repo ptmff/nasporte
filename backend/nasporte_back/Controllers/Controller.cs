@@ -1,3 +1,4 @@
+using System.Data;
 using Data;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -8,6 +9,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Npgsql;
 using Microsoft.Extensions.Logging;
+using NpgsqlTypes;
 
 namespace Controllers;
 
@@ -164,16 +166,18 @@ public class AuthController : ControllerBase
 
 [Route("[controller]")]
 [ApiController]
-public class LoggedController : ControllerBase
+public class ChatController : ControllerBase
 {
-    private readonly ILogger<LoggedController> _logger;
+    private readonly IConfiguration _configuration;
+    private readonly ILogger<ChatController> _logger;
 
-    public LoggedController(ILogger<LoggedController> logger)
+    public ChatController(IConfiguration configuration, ILogger<ChatController> logger)
     {
+        _configuration = configuration;
         _logger = logger;
     }
 
-    [HttpGet]
+    [HttpGet("Status")]
     [Authorize]
     public IActionResult Get()
     {
@@ -184,6 +188,108 @@ public class LoggedController : ControllerBase
         _logger.LogInformation("Secure endpoint accessed by user: id={UserId}", userId);
 
         return Ok($"This is a secure endpoint\nUser ID: {userId}");
+    }
+
+
+
+    [HttpPost("New")]
+    [Authorize]
+    public async Task<IActionResult> New([FromBody] string login)
+    {
+        try
+        {
+            using (var connection = PostgresConnection.GetConnection(_configuration))
+            {
+                if (connection.State != System.Data.ConnectionState.Open)
+                {
+                    await connection.OpenAsync();
+                }
+                
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claims = claimsIdentity.Claims;
+                var userIdStr = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+                var userId = Guid.ParseExact(userIdStr, "D");
+                var chatId = Guid.NewGuid().ToString();
+
+                var findUserQuery = "SELECT * FROM Users WHERE id = @userId";
+                using (var findCommand = new NpgsqlCommand(findUserQuery, connection))
+                {
+                    findCommand.Parameters.AddWithValue("@userId", userId);
+
+                    using (var reader = await findCommand.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            var chats = reader["chats"] as string[];
+                            if (chats == null)
+                            {
+                                chats = new string[] { };
+                            }
+
+                            var updatedChats = chats.Append(chatId).ToArray();
+                            reader.Close(); // Ensure reader is closed before executing another command
+
+                            var updateUserQuery = "UPDATE Users SET chats = @chats WHERE id = @userId";
+                            using (var updateCommand = new NpgsqlCommand(updateUserQuery, connection))
+                            {
+                                updateCommand.Parameters.AddWithValue("@chats", updatedChats);
+                                updateCommand.Parameters.AddWithValue("@userId", userId);
+
+                                await updateCommand.ExecuteNonQueryAsync();
+                            }
+                        }
+                        else
+                        {
+                            return NotFound("User not found");
+                        }
+                    }
+                }
+                
+                findUserQuery = "SELECT * FROM Users WHERE username = @username OR email = @email";
+                using (var findCommand = new NpgsqlCommand(findUserQuery, connection))
+                {
+                    findCommand.Parameters.AddWithValue("@username", login);
+                    findCommand.Parameters.AddWithValue("@email", login);
+
+                    using (var reader = await findCommand.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            var chats = reader["chats"] as string[];
+                            if (chats == null)
+                            {
+                                chats = new string[] { };
+                            }
+
+                            var updatedChats = chats.Append(chatId).ToArray();
+                            reader.Close(); // Ensure reader is closed before executing another command
+
+                            var updateUserQuery = "UPDATE Users SET chats = @chats WHERE username = @username OR email = @email";
+                            using (var updateCommand = new NpgsqlCommand(updateUserQuery, connection))
+                            {
+                                updateCommand.Parameters.AddWithValue("@chats", updatedChats);
+                                updateCommand.Parameters.AddWithValue("@username", login);
+                                updateCommand.Parameters.AddWithValue("@email", login);
+
+                                await updateCommand.ExecuteNonQueryAsync();
+                            }
+                        }
+                        else
+                        {
+                            return NotFound("User not found");
+                        }
+                    }
+                }
+
+                _logger.LogInformation("Chat created successfully: userId={UserId}, chatId={ChatId}", userId, chatId);
+                return Ok(new { ChatId = chatId });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during chat creation: userId={UserId}");
+            return StatusCode(500, $"Произошла ошибка при создании чата: {ex.Message}");
+        }
     }
 }
 

@@ -16,6 +16,9 @@ namespace Models
     
     [Column("password")]
     public string Password { get; set; }
+    
+    [Column("chats")]
+    public string[]? Chats { get; set; }
   }
   
   public class LoginModel

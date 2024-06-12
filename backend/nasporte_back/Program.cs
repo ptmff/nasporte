@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SignalRApp; 
 
 MigrateDatabase.Migrate();
 
@@ -131,9 +130,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseDefaultFiles();
-app.UseStaticFiles();
-app.MapHub<ChatHub>("/chat");
 
 app.Run();
