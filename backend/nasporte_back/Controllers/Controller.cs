@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Npgsql;
 using Microsoft.Extensions.Logging;
@@ -179,7 +180,7 @@ public class ChatController : ControllerBase
 
     [HttpGet("Status")]
     [Authorize]
-    public IActionResult Get()
+    public IActionResult Status()
     {
         var claimsIdentity = (ClaimsIdentity)User.Identity;
         var claims = claimsIdentity.Claims;
@@ -291,42 +292,55 @@ public class ChatController : ControllerBase
             return StatusCode(500, $"Произошла ошибка при создании чата: {ex.Message}");
         }
     }
+
+    [HttpGet("All")]
+    [Authorize]
+    public async Task<IActionResult> All()
+    {
+        var claimsIdentity = (ClaimsIdentity)User.Identity;
+        var claims = claimsIdentity.Claims;
+        var userIdStr = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+        var userId = Guid.ParseExact(userIdStr, "D");
+        try
+        {
+            using (var connection = PostgresConnection.GetConnection(_configuration))
+            {
+                if (connection.State != System.Data.ConnectionState.Open)
+                {
+                    await connection.OpenAsync();
+                }
+
+                var findUserQuery = "SELECT * FROM Users WHERE id = @userId";
+                using (var findCommand = new NpgsqlCommand(findUserQuery, connection))
+                {
+                    findCommand.Parameters.AddWithValue("@userId", userId);
+
+                    using (var reader = await findCommand.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            var chats = reader["chats"] as string[];
+                            if (chats == null)
+                            {
+                                chats = new string[] { };
+                            }
+
+                            _logger.LogInformation("Returned all chats for user: id={UserId}", userId);
+
+                            return Ok($"Chats list\nChat IDs: {JsonSerializer.Serialize(chats)}");
+                        }
+                        else
+                        {
+                            return NotFound("User not found");
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during chat listing: userId={UserId}");
+            return StatusCode(500, $"Произошла ошибка при выводе всех чатов: {ex.Message}");
+        }
+    }
 }
-
-// примерно как будет таблица выглядеть
-
-// CREATE TABLE dialogs (
-//     id SERIAL PRIMARY KEY,
-//     user1_id INTEGER NOT NULL,
-//     user2_id INTEGER NOT NULL,
-//     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-// );
-
-// CREATE TABLE messages (
-//     id SERIAL PRIMARY KEY,
-//     dialog_id INTEGER NOT NULL REFERENCES dialogs(id),
-//     sender_id INTEGER NOT NULL,
-//     text TEXT NOT NULL,
-//     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-// );
-
-
-
-// примерно как будет таблица выглядеть
-
-// CREATE TABLE dialogs (
-//     id SERIAL PRIMARY KEY,
-//     user1_id INTEGER NOT NULL,
-//     user2_id INTEGER NOT NULL,
-//     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-// );
-
-// CREATE TABLE messages (
-//     id SERIAL PRIMARY KEY,
-//     dialog_id INTEGER NOT NULL REFERENCES dialogs(id),
-//     sender_id INTEGER NOT NULL,
-//     text TEXT NOT NULL,
-//     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-// );
-
-
