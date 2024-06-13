@@ -26,7 +26,23 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="wwwroot\index.html" />
+      <Compile Remove="wwwroot\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="wwwroot\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="wwwroot\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations\" />
     </ItemGroup>
 
 </Project>
