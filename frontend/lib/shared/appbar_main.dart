@@ -26,7 +26,8 @@ Container appBar() {
         toolbarHeight: 100,
         leadingWidth: 110,
         leading: Container(
-          margin: const EdgeInsets.only(left: 16),
+          alignment: Alignment.topLeft,
+          margin: const EdgeInsets.only(left: 30, top: 0),
           child: SvgPicture.asset('assets/icons/nasporte_icon.svg'),
         ),
         actions: [
