@@ -20,6 +20,9 @@ namespace Models
     
     [Column("chats")]
     public string[]? Chats { get; set; }
+    
+    [Column("profile_pic")]
+    public string? ProfilePic { get; set; }
   }
   
   public class LoginModel

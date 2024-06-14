@@ -163,6 +163,84 @@ public class AuthController : ControllerBase
             return StatusCode(500, $"Произошла ошибка при авторизации: {ex.Message}");
         }
     }
+    
+    [HttpPost("updateProfilePic")]
+    [Authorize]
+    public async Task<IActionResult> UpdateProfilePic([FromBody] string profilePicUrl)
+    {
+        try
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.Claims;
+            var userIdStr = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            var userId = Guid.ParseExact(userIdStr, "D");
+
+            using (var connection = PostgresConnection.GetConnection(_configuration))
+            {
+                var updateQuery = "UPDATE Users SET profile_pic = @profilePicUrl WHERE id = @userId";
+                using (var command = new NpgsqlCommand(updateQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@profilePicUrl", profilePicUrl);
+                    command.Parameters.AddWithValue("@userId", userId);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+
+            _logger.LogInformation("Profile picture updated successfully for user: id={UserId}", userId);
+
+            return Ok("Profile picture updated successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during profile picture update: userId={UserId}");
+            return StatusCode(500, $"Произошла ошибка при обновлении профиля: {ex.Message}");
+        }
+    }
+    
+    [HttpGet("profile")]
+    [Authorize]
+    public async Task<IActionResult> GetProfile()
+    {
+        try
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.Claims;
+            var userIdStr = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            var userId = Guid.ParseExact(userIdStr, "D");
+
+            using (var connection = PostgresConnection.GetConnection(_configuration))
+            {
+                var getUserQuery = "SELECT username, email, profile_pic FROM Users WHERE id = @userId";
+                using (var command = new NpgsqlCommand(getUserQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@userId", userId);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            var username = reader["username"].ToString();
+                            var email = reader["email"].ToString();
+                            var profilePic = reader["profile_pic"].ToString();
+
+                            return Ok(new { ProfilePic = profilePic, Username = username, Email = email });
+                        }
+                        else
+                        {
+                            _logger.LogWarning("User not found: id={UserId}", userId);
+                            return NotFound("Пользователь не найден");
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during profile retrieval: userId={UserId}");
+            return StatusCode(500, $"Произошла ошибка при получении профиля: {ex.Message}");
+        }
+    }
 }
 
 [Route("[controller]")]
