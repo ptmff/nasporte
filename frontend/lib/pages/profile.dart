@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'chat.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,7 +11,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String avatarUrl = '';
-  String userName = 'Гошан Рубчинский';
+  String userName = 'jojjiik';
   String userId = '@id123456';
   String email = 'bugagaha@gmail.com';
 
@@ -39,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _navigateToSettings(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SettingsPage()),
+      MaterialPageRoute(builder: (context) => ChatPage()),
     );
   }
 
@@ -82,13 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
               style: const TextStyle(fontFamily: 'Inner', fontWeight: FontWeight.w600, fontSize: 27, color: Colors.black),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 5),
-            Text(
-              userId,
-              style: TextStyle(fontFamily: 'Inner', fontWeight: FontWeight.w600, fontSize: 14, color: Colors.grey[700]),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
             Text(
               email,
               style: TextStyle(fontFamily: 'Inner', fontWeight: FontWeight.w500, fontSize: 14, color: Colors.grey[700]),
