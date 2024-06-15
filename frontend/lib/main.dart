@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nasporte_frontend/pages/home.dart';
+import 'package:nasporte_frontend/pages/login.dart';
 import 'package:provider/provider.dart';
 import 'package:nasporte_frontend/pages/load.dart';
 import 'package:nasporte_frontend/pages/main_page.dart';
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
-      home: const MainPage(),
+      home: const LoginPage(),
     );
   }
 }

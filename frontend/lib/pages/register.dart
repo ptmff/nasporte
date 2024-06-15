@@ -3,6 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nasporte_frontend/pages/login.dart';
+import 'package:nasporte_frontend/pages/home.dart';
+import 'package:nasporte_frontend/pages/main_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -56,12 +59,18 @@ class _RegisterPageState extends State<RegisterPage> {
       }),
     );
     if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final token = data['token'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Регистрация прошла успешно')),
       );
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage())
+        MaterialPageRoute(builder: (context) => const MainPage())
         );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

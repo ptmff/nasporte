@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8DOFBHjOTq2ZU6lnlbrjZbpgO1KzXgN4EQ4Erm7LMgE=",
+  "Hash": "zMddfd5owbM1F+BR3/sfHhxLVvunPlF/nCSKU2tY3cY=",
   "Source": "nasporte_back",
   "BasePath": "_content/nasporte_back",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "nasporte_back\\wwwroot",
       "Source": "nasporte_back",
-      "ContentRoot": "C:\\Users\\ptmff\\RiderProjects\\nasporte\\backend\\nasporte_back\\wwwroot\\",
+      "ContentRoot": "D:\\Flutter_Projects\\nasporte\\backend\\nasporte_back\\wwwroot\\",
       "BasePath": "_content/nasporte_back",
       "Pattern": "**"
     }

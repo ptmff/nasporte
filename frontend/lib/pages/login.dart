@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:nasporte_frontend/pages/main_page.dart';
 import 'package:nasporte_frontend/pages/register.dart';
+import 'package:nasporte_frontend/pages/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,12 +28,6 @@ class  _LoginPageState extends State<LoginPage>{
       );
       return;
     }
-    if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$').hasMatch(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Некорректная почта')),
-      );
-      return;
-    }
     const url = 'http://10.0.2.2:5038/Auth/login';
     final response = await http.post(
       Uri.parse(url),
@@ -43,18 +40,24 @@ class  _LoginPageState extends State<LoginPage>{
       }),
     );
     if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final token = data['token'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Вы вошли в аккаунт')),
       );
+      Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MainPage()),
+    );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Неверная почта или пароль')),
       );
     }
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const HomePage()),
-    // );
   }
 
   @override

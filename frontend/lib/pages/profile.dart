@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'chat.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -10,42 +13,56 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String avatarUrl = '';
-  String userName = 'jojjiik';
-  String userId = '@id123456';
-  String email = 'bugagaha@gmail.com';
+  String profilePic = '';
+  String username = '';
+  String email = '';
 
   @override
-  // void initState() {
-  //   super.initState();
-  //   _fetchProfileData();
-  // }
+  void initState() {
+    super.initState();
+    _fetchProfileData();
+  }
 
-  // Future<void> _fetchProfileData() async {
-  //   final response = await http.get(Uri.parse('https://example.com/api/profile'));
+  Future<void> _fetchProfileData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
 
-  //   if (response.statusCode == 200) {
-  //     final data = json.decode(response.body);
-  //     setState(() {
-  //       avatarUrl = data['avatarUrl'];
-  //       userName = data['userName'];
-  //       userId = data['userId'];
-  //       email = data['email'];
-  //     });
-  //   } else {
-  //     // Обработка ошибки
-  //   }
-  // }
+    if (token == null) {
+      // Обработка случая, если токен отсутствует
+      print('No token found');
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2:5038/Auth/profile'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Response body: ${response.body}');
+      final data = json.decode(response.body);
+      setState(() {
+        profilePic = data['profilePic'] ?? '';
+        username = data['username'] ?? '';
+        email = data['email'] ?? '';
+      });
+    } else {
+      // Обработка ошибки
+      print('Error: ${response.statusCode}');
+    }
+  }
 
   void _navigateToSettings(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ChatPage()),
+      MaterialPageRoute(builder: (context) => const SettingsPage()),
     );
   }
 
   void _logout() {
-    // нада сделат
+    // Логика для выхода из системы, например, очистка токена из SharedPreferences
   }
 
   @override
@@ -62,10 +79,10 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            if (avatarUrl.isNotEmpty)
+            if (profilePic.isNotEmpty)
               CircleAvatar(
                 radius: 55,
-                backgroundImage: NetworkImage(avatarUrl),
+                backgroundImage: NetworkImage(profilePic),
               )
             else
               CircleAvatar(
@@ -79,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             const SizedBox(height: 10),
             Text(
-              userName,
+              username,
               style: const TextStyle(fontFamily: 'Inner', fontWeight: FontWeight.w600, fontSize: 27, color: Colors.black),
               textAlign: TextAlign.center,
             ),
@@ -107,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 backgroundColor: Colors.white,
                 elevation: 0,
                 side: BorderSide.none,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -120,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 backgroundColor: Colors.white,
                 elevation: 0,
                 side: BorderSide.none,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -147,7 +164,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
