@@ -16,6 +16,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   provider: ^6.1.2
   shared_preferences: ^2.2.3
+  signalr_core: ^1.1.2
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:

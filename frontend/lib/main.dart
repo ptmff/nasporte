@@ -8,11 +8,9 @@ import 'package:nasporte_frontend/pages/chat.dart';
 
 void main() {
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ChatProvider()),
-      ],
-      child: const MyApp(),
+    ChangeNotifierProvider(
+      create: (context) => ChatProvider(),
+      child: MyApp(),
     ),
   );
 }

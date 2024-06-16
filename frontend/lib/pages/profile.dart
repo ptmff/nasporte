@@ -57,12 +57,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void _navigateToSettings(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SettingsPage()),
+      MaterialPageRoute(builder: (context) => ChatPage()),
     );
   }
 
   void _logout() {
-    // Логика для выхода из системы, например, очистка токена из SharedPreferences
+    // нада сделат
   }
 
   @override
