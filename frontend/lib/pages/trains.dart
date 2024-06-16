@@ -50,7 +50,7 @@ Container _appBar (context) {
             Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(top: 80),
+                padding: EdgeInsets.only(top: 57),
                 child: Text(
                   'Тренировка',
                   style: TextStyle(
