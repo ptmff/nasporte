@@ -4,7 +4,7 @@ import 'package:nasporte_frontend/pages/home.dart';
 import 'package:nasporte_frontend/pages/profile.dart';
 import 'package:nasporte_frontend/pages/progression.dart';
 import 'package:nasporte_frontend/pages/schedule.dart';
-import 'package:nasporte_frontend/pages/trains.dart';
+import 'package:nasporte_frontend/pages/trainers.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -19,7 +19,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _pages = <Widget> [
     const HomePage(),
     const SchedulePage(),
-    const TrainsPage(),
+    const TrainersPage(),
     const ProgressionPage(),
     const ProfilePage(),
   ];

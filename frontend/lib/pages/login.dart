@@ -190,7 +190,7 @@ Column _passwordInput() {
           padding: const EdgeInsets.only(left: 50, top: 7),
           child: GestureDetector (
             onTap: () {
-              //открывает страницу с восстановлением пароля(хз как мы это делать будем)
+              //открывает страницу с восстановлением пароля
             },
             child: const Text(
               'Забыли пароль?',

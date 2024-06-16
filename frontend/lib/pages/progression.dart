@@ -9,6 +9,7 @@ class ProgressionPage extends StatefulWidget {
 }
 
 class _ProgressionPageState extends State<ProgressionPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffFFFFFF),

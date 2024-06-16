@@ -10,7 +10,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => ChatProvider(),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
-      home: const LoginPage(),
+      home: const MainPage(),
     );
   }
 }
