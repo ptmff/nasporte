@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\nasporte_back.props" />
+</Project>
