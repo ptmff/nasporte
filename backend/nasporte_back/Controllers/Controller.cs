@@ -473,5 +473,57 @@ public class ChatController : ControllerBase
             return StatusCode(500, $"Произошла ошибка при выводе всех сообщений: {ex.Message}");
         }
     }
+}
 
+[Route("[controller]")]
+[ApiController]
+public class WorkoutController : ControllerBase
+{
+    private readonly IConfiguration _configuration;
+    private readonly ILogger<ChatController> _logger;
+
+    public WorkoutController(IConfiguration configuration, ILogger<ChatController> logger)
+    {
+        _configuration = configuration;
+        _logger = logger;
+    }
+    
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> AddWorkout([FromBody] WorkoutModel workout)
+    {
+        try
+        {
+            using (var connection = PostgresConnection.GetConnection(_configuration))
+            {
+                if (connection.State != System.Data.ConnectionState.Open)
+                {
+                    await connection.OpenAsync();
+                }
+
+                var Id = Guid.NewGuid();
+                var insertQuery = "INSERT INTO Workouts (id, name, png, type, difficulty, quantity) VALUES (@id, @name, @png, @type, @difficulty, @quantity)";
+                using (var command = new NpgsqlCommand(insertQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@id", Id);
+                    command.Parameters.AddWithValue("@name", workout.Name);
+                    command.Parameters.AddWithValue("@png", workout.Png);
+                    command.Parameters.AddWithValue("@type", workout.Type);
+                    command.Parameters.AddWithValue("@difficulty", workout.Difficulty);
+                    command.Parameters.AddWithValue("@quantity", workout.Quantity);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+
+                _logger.LogInformation("Workout added successfully: name={Name}", workout.Name);
+
+                return Ok("Workout added successfully");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during workout addition: name={Name}", workout.Name);
+            return StatusCode(500, $"Произошла ошибка при добавлении тренировки: {ex.Message}");
+        }
+    }
 }

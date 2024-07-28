@@ -39,6 +39,16 @@ namespace Models
     public string RepeatedPassword { get; set; }
   }
   
+  
+  public class WorkoutModel
+  {
+    public string Name { get; set; }
+    public string Png { get; set; }
+    public string Type { get; set; }
+    public int Difficulty { get; set; }
+    public string Quantity { get; set; }
+  }
+  
   [Table("messages")]
   public class Message
   {
@@ -58,5 +68,27 @@ namespace Models
     
     [Column("time_stamp")]
     public DateTime TimeStamp { get; set; }
+  }
+  
+  [Table("workouts")]
+  public class Workout
+  {
+    [Column("id")]
+    public Guid Id { get; set; }
+
+    [Column("name")]
+    public string Name { get; set; }
+
+    [Column("png")]
+    public string Png { get; set; }
+    
+    [Column("type")]
+    public string Type { get; set; }
+    
+    [Column("difficulty")]
+    public int Difficulty { get; set; }
+    
+    [Column("quantity")]
+    public string Quantity { get; set; }
   }
 }

@@ -11,8 +11,9 @@ namespace Data
 
     public DbSet<User> Users { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Workout> Workouts { get; set; }
     
-    //Такое только для messages делаем, так как там uuid сами должны создаваться а для этого расширение нужно
+    //Такое только для messages делаем, так как там uuid сами должны создаваться, а для этого расширение нужно
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
